@@ -1,0 +1,116 @@
+=head1 NAME
+
+Games::Maze - Create Mazes as Objects.
+
+=head1 SYNOPSIS
+
+ use Games::Maze::MazeD2;
+ use Games::Maze::MazeXD2;
+ use Games::Maze::MazeD3;
+ use Games::Maze::MazeXD3;
+
+ my($minos) = MazeD2->new($columns, $rows);
+ my($theseus) = MazeXD2->new($columns, $rows);
+ my($minotaur) = MazeD3->new($columns, $rows, $levels);
+ my($posiedon) = MazeXD3->new($columns, $rows, $levels);
+
+ $minos->reset();       # Actually, automatically called.
+ $minos->make();
+ $minos->solve();
+ $minos->to_ascii();
+ $minos->to_hex_dump();
+
+=head1 PREREQUISITES
+
+Perl 5.003_20 or later. This is the version that is required for the
+"use constant" pragma, and constants are used throughout the code.
+
+=head1 INSTALLATION
+
+ perl Makefile.PL
+ make 
+ make test 
+ make install
+
+Note: You may get a warning when running 'make test'.  This may occur
+because you have compiled your perl with a value of RANDBITS that is
+unknown to the test case. The test files will be written in /tmp. Please
+send them and your RANDBITS value to B<jgamble@ripco.com> so that they
+can be incorporated into the next release.
+
+=head1 DESCRIPTION
+
+Simply put, these packages create mazes. Your choices are the simple
+2-dimensional rectangular maze, the 2-dimensional hexagonal maze, the
+3-dimensional rectangular maze, and the 3-dimensional hexagonal maze. 
+The mazes are objects that you can manipulate using the available
+methods.
+
+From a purely functional standpoint, the 2-dimensional packages are
+unneeded, as a 3-dimensional maze that is one level deep does mimic a
+2-dimensional maze, but the internal functionality of the 2-dimensional
+maze is slightly different and somewhat more efficient, and so is
+retained.
+
+=head2 Maze Object Methods
+
+=over 8
+
+=item new([columns [, rows [, levels] ])
+
+Creates the object with it's attributes. I<Columns> and I<rows> will
+default to 3 if you don't pass parameters to the method. For
+3-dimensional mazes, I<levels> defaults to 2.
+
+=item reset
+
+Resets the matrix m. You should not normally need to call this method,
+as the other methods will call it when needed.
+
+=item make
+
+Perform a random walk through the walls of the grid. This creates a
+simply-connected maze.
+
+=item solve
+
+Finds a solution to the maze by examining a path until a dead end is
+reached.
+
+=item to_hex_dump
+
+Returns a formatted string all of the cell values, including the border
+cells, in hexadecimal.
+
+=item to_ascii
+
+Translate the maze into a string of ascii 7-bit characters. If called in
+an array context, return as a list of levels. Otherwise returned as a
+single string, each level separated by a single newline. The maze
+created by MazeD2 and MazeXD2 is always a single string.
+
+Currently, this is the only method available to view the maze. It
+uses underscores, both slash characters, and vertical bars to represent
+the walls of the maze. The asterisk represents the path, and the
+letters 'c', 'f', and 'b' represent entries through the ceiling, floor,
+or both, respectively.
+
+=back
+
+=head1 EXAMPLES
+
+ use Games::Maze::MazeD3;
+
+ my($minos) = MazeD3->new(8, 6, 3);
+ $minos->make();
+ $, = "\n\n";
+ print $minos->to_ascii();
+ print "\nThe Solution...\n";
+ $minos->solve();
+ print $minos->to_ascii();
+ exit(0);
+
+=head1 AUTHOR
+
+John M. Gamble may be found at B<jgamble@ripco.com>
+

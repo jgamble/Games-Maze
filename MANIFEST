@@ -1,0 +1,10 @@
+Changes
+Maze.pod
+Maze/MazeD2.pm
+Maze/MazeXD2.pm
+Maze/MazeD3.pm
+Maze/MazeXD3.pm
+MANIFEST
+Makefile.PL
+README
+t/maze.t
