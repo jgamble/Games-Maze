@@ -1,133 +1,23 @@
+		Games::Maze
+
 Create Mazes as Objects.
 
-use Games::Maze::MazeD2;
-use Games::Maze::MazeXD2;
-use Games::Maze::MazeD3;
-use Games::Maze::MazeXD3;
+use Games::Maze;
 
-Then you may use:
+my $m1 = Games::Maze->new(dimensions => [12,7,3]);
+my $m2 = Games::Maze->new(dimensions => [8,5,2], cell => 'Hex');
 
-my($minos) = MazeD2->new($columns, $rows);
-my($theseus) = MazeXD2->new($columns, $rows);
-my($minotaur) = MazeD3->new($columns, $rows, $levels);
-my($posiedon) = MazeXD3->new($columns, $rows, $levels);
+$m1->make();
 
+print scalar($m1->to_ascii());
 
-HISTORY & BACKGROUND INFORMATION
+$m1->solve();
 
-Looking at the version 0.001 code may be a slightly appalling experience
-for the expert Perl programmer. This code is a fairly direct translation
-of the CDC Pascal source, which in turn was translated from a CDC
-Fortran (well, MNF to be precise) program written back in 1978 or 1979.
-Aside from changing some functions to methods, very little is new.
+print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
 
-A Note about 'make test'
+INSTALLATION
 
-I only have test cases for perls compiled with RANDBITS == 15. The test
-will pass for other values, but you will get a warning when that occurs.
-Please send me the results of your tests and your RANDBITS value, if
-that should happen, and i'll include it in my next release. Thanks.
-
-The Algorithm
-
-The algorithm is simple. The maze is considered to be an array of
-cells, each cell bounded by walls that are shared with its neighbor. 
-The program starts with a random cell, and randomly 'walks' through
-a wall (knocking it down in the process) into a neighboring enclosed
-cell. If it reaches a dead end, it returns to a point where it can
-continue its random walk. When it runs out of enclosed cells to break
-into, the algorithm is done.
-
-Solving
-
-Since this process creates simply-connected mazes (that is, a maze where
-there is only one path between any two points), the solving method is
-straightforward. Go forward until either you reach the exit, or until
-you run into a wall. If you have run into a wall, turn to the next
-direction and walk forward. Repeat. Drop off or pick up path marks as
-you exit one cube for another.
-
-A 'hand-on-wall' method of solving (not included in the packages) that
-you may have learned as a kid works, but only for the 2-dimensional
-mazes. Sadly, it will often wind up in an infinite loop when it is
-extended to the three-dimensional case. I suspect that for this solving
-algorithm to work, it would have to chose its next move based not only
-on the current wall, but the prior move's wall as well. I haven't
-bothered to test this, though. Since the go-forward method works so well
-with both 2- and 3-dimensional mazes, I haven't attempted to adapt the
-hand-on-wall methd.
-
-THINGS TO COME
-
-In rough order of personal priorities:
-
-1   Better use of Perl's features. This code betrays too much of its Fortran
-    and Pascal background.
-
-2   Should use inheritance in similarly-dimensioned classes (i.e., MazeD2
-    and MazeXD2; MazeD3 and MazeXD3).
-
-3   Make the compile-time options run-time options instead. Examples would
-    be: set the start and finish points; step-by-step making and solving and
-    other debugging options; choice of maze types.
-
-4   Hexagonal Hexagon maze.
-
-5   Multiply-connected mazes. Currently, the mazes that get created are
-    singly-connected.
-
-6   Choosing maze generation styles, e.g., 'symetric-2', 'symetric-4', etc.
-
-7   Postscript output.
-
-8   GIF output.
-
-9   Other tiles for mazes (octogon/square, for example)
-
-10  Interactive view of the maze from the point of view of the pathwalker.
-
-11  Four-dimensional mazes. Certainly possible to do, complicated
-    only by the layout of the printing.
-
-12  Complicated 3-D tessellation, as opposed to the 3-D mazes that we have
-    now that are merely layered 2-D tessellations. For example, an
-    octohedron/tetrahedron space filling, as seen in M. C. Escher's
-    I<Curl-Up>, or the hexagon/pentagon tiling on the surface of a soccer
-    ball. Don't expect these anytime before an interactive view gets made.
-
-
-Representing Hexagonal Mazes
-
-Hexagonal mazes, as you may notice if you study the code, are simply
-rectangular mazes with a 'hexagonal drift'. That is,
-
-      hexagonal mesh      => =>  =>  square grid with 'hexagonal drift'
-
-  1  2  3  4  5  6  7  8             1   2   3   4   5   6   7   8
-  __    __    __    __              ___     ___     ___     ___    
- /  \__/  \__/  \__/  \__          |   |___|   |___|   |___|   |___
- \__/  \__/  \__/  \__/  \         |___|   |___|   |___|   |___|   |
- /  \__/  \__/  \__/  \__/         |   |___|   |___|   |___|   |___|
- \__/  \__/  \__/  \__/  \         |___|   |___|   |___|   |___|   |
- /  \__/  \__/  \__/  \__/         |   |___|   |___|   |___|   |___|
- \__/  \__/  \__/  \__/  \         |___|   |___|   |___|   |___|   |
- /  \__/  \__/  \__/  \__/         |   |___|   |___|   |___|   |___|
- \__/  \__/  \__/  \__/  \         |___|   |___|   |___|   |___|   |
-    \__/  \__/  \__/  \__/             |___|   |___|   |___|   |___|
-
-
-Moving the squares or cubes back in position gives us a basic 8x4
-matrix, which is easy to represent in perl code. This leaves only the
-question of which six of the eight cells we can move to after choosing
-one of the six possible directions to go. There are two possible
-choices:
-
-      _\|/_  or   __|__
-        |          /|\
-
-Which one we use depends upon whether we are in an up-shifted column or
-not.
-
-Incidently, these are also the moves allowed to the opposing Gold
-General pieces in the game Shogi (a chess-like game from Japan).
-Coincidence? Well, probably, but it is interesting to contemplate.
+perl Makefile.PL
+make 
+make test 
+make install
