@@ -60,6 +60,9 @@ Revision history:
 	  i need to knock down the wall on both the border and maze cells.
 	- Added the unsolve() method.
 
+1.02	Mon Jun 03 19:29:53 2002
+	- Documentation fixes as pointed out by David Hand.
+
 
 HISTORY & BACKGROUND INFORMATION
 

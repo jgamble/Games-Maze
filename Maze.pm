@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 
 our $North      = 0x0001;	# 0;
@@ -21,7 +21,7 @@ our $Floor      = 0x0200;	# 9;
 our $Path_Mark  = 0x8000;	# 15;
 
 #
-# So, in bytes, the cells are:
+# So, in bytes, cells are the bit sum of:
 #
 # 1  0  | 3  2  1  0  | 3  2  1  0
 # ------+-------------+-----------
@@ -1797,7 +1797,7 @@ string, each level separated by a single newline.
  #
  # Create and print the maze and the solution to the maze.
  #
- my $minos = Games::Maze::Maze->new(dimensions => [15, 15, 3]);
+ my $minos = Games::Maze->new(dimensions => [15, 15, 3]);
  $minos->make();
  print "\n\nThe Maze...\n", scalar($minos->to_ascii());
  $minos->solve();
@@ -1806,7 +1806,7 @@ string, each level separated by a single newline.
  #
  # We're curious about the maze properties.
  #
- my %p = $obj->describe();
+ my %p = $minos->describe();
 
  foreach (sort keys %p)
  {
