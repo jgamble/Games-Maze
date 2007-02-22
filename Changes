@@ -1,3 +1,10 @@
+
+###
+NOTE: This module is being re-written.  From now on version 1.0x will
+only be changed for bug fixes and maintenance.  New features will be in
+the version 2.00-track.  See the TODO file for more information.
+###
+
 Revision history:
 
 0.01	Wed Apr 28 14:14:56 1999
@@ -62,6 +69,12 @@ Revision history:
 
 1.02	Mon Jun 03 19:29:53 2002
 	- Documentation fixes as pointed out by David Hand.
+
+1.03	Wed Feb 21 2007
+	- Some changes to the structure of the distribution directory
+	  in order to keep up with the current state of perl.
+	- Use Test::Simple for tests, Module::Build for buiding, and
+	  add a META.yml file.
 
 
 HISTORY & BACKGROUND INFORMATION

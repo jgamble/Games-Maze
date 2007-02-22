@@ -1,11 +1,15 @@
+Build.PL
 Changes
 MANIFEST
+META.yml
 Makefile.PL
-Maze.pm
+eg/mz.pl
+lib/Games/Maze.pm
 README
 TODO
 t/first.t
 t/mazeprop.pl
+t/pod.t
 t/rq01.t
 t/rx01.t
 t/rx02.t

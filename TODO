@@ -1,31 +1,17 @@
 THINGS TO COME
 
-In rough order of personal priorities:
+There was a long list here in version 1.02.  It's gone here because I
+intend to re-write Games::Maze this year.
 
-0   Change the internal array to a bit vector.  Right now the $m[][][]
-    style is a legacy from old Fortran code.
+The main feature that will appear in the version 2.00-track will be
+plug-ins for making the maze (I already have three different ones written).
 
-1   Make some compile-time options run-time options instead.  Examples
-    would be: step-by-step making and solving; other debugging options.
+Output will be changed, and might be done with plug-ins as well.
 
-2   Multiply-connected mazes.  Currently the mazes created are
-    singly-connected.
+I will keep the version 1.00-track Games::Maze on CPAN because there are
+some scripts and modules that use it, but any changes to it will be
+maintenance only.  Any new features will be put in the version 2.00-track.
 
-3   Choosing maze generation styles, e.g., 'symetric-2', 'symetric-4', etc.
+If you have any suggestions, or want to critique the work so far, please
+contact me at the e-mail address in the module.
 
-4   Postscript output.
-
-5   GIF output.
-
-6   Other tiles for mazes (octagon/square, for example)
-
-7   Interactive view of the maze from the point of view of the pathwalker.
-
-8   Four-dimensional mazes.  Certainly possible to do, complicated
-    only by the layout of the printing.
-
-9   Complicated 3-D tessellation, as opposed to the 3-D mazes that we have
-    now that are merely layered 2-D tessellations.  For example, an
-    octohedron/tetrahedron space filling, as seen in M. C. Escher's
-    I<Curl-Up>, or the hexagon/pentagon tiling on the surface of a soccer
-    ball.  Don't expect these anytime before an interactive view gets made.

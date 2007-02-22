@@ -1,22 +1,10 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl test.pl'
+#
+#
+#
 
-######################### We start with some black magic to print on failure.
+use Test::Simple tests => 4;
 
-# Change 1..1 below to 1..last_test_to_print .
-# (It may become useful if the test is moved to ./t subdirectory.)
-
-BEGIN { $| = 1; print "1..5\n"; };
-END {print "not ok 1\n" unless $loaded;}
 use Games::Maze;
-$loaded = 1;
-print "ok 1\n";
-
-######################### End of black magic.
-
-# Insert your test code below (better if it prints "ok 13"
-# (correspondingly "not ok 13") depending on the success of chunk 13
-# of the test code):
 
 my $correct_make = 
 q(                      __                     
@@ -118,18 +106,18 @@ my $minos = Games::Maze->new(
 
 $minos->make();
 my $maze_form = $minos->to_ascii();
-print +($maze_form ne $correct_make)? "not ok 2\n": "ok 2\n";
+ok(($maze_form eq $correct_make), "->make() check");
 
 $minos->solve();
 $maze_form = $minos->to_ascii();
-print +($maze_form ne $correct_solve)? "not ok 3\n": "ok 3\n";
+ok(($maze_form eq $correct_solve), "->solve() check");
 
 $maze_form = $minos->to_hex_dump();
-print +($maze_form ne $correct_hex)? "not ok 4\n": "ok 4\n";
+ok(($maze_form eq $correct_hex), "->to_hex_dump() check");
 
 $minos->unsolve();
 $maze_form = $minos->to_ascii();
-print +($maze_form ne $correct_make)? "not ok 5\n": "ok 5\n";
+ok(($maze_form eq $correct_make), "->unsolve() check");
 
 exit(0);
 

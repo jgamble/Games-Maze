@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 
 our $North      = 0x0001;	# 0;
@@ -92,6 +92,9 @@ my($Debug_make_ascii, $Debug_make_vx) = (0, 0);
 my($Debug_solve_ascii, $Debug_solve_vx) = (0, 0);
 my($Debug_internal) = 0;
 
+#
+# Valid options to new().
+#
 my %valid = (
 	dimensions => 'array',
 	form => 'scalar',
@@ -866,6 +869,7 @@ sub _move_thru
 	my($dir, $c, $r, $l) = @_;
 
 	print STDERR "_move_thru: [$c, $r, $l] to $dir\n" if ($Debug_internal);
+
 	if ($dir == $North or $dir == $South)
 	{
 		$r += ($dir == $North)? -1: 1;
@@ -1533,9 +1537,9 @@ sub _first_last_col
 
 	if ($self->{'form'} eq 'Hexagon')
 	{
-		my($mid_c) = ($self->{'_cols'} + 1)/2;
-		my($ante_r) = $self->{'_cols'}/4;
-		my($post_r) = $self->{'_rows'} - ($self->{'_cols'} + 1)/4;
+		my $mid_c = ($self->{'_cols'} + 1)/2;
+		my $ante_r = $self->{'_cols'}/4;
+		my $post_r = $self->{'_rows'} - ($self->{'_cols'} + 1)/4;
 
 		if ($r <= $ante_r)
 		{
@@ -1627,9 +1631,7 @@ are objects that you can manipulate using the available methods.
 
 =head2 Maze Object Methods
 
-=over 8
-
-=item new([<attribute> => value, ...])
+=head3 new([<attribute> => value, ...])
 
 Creates the object with its attributes. Current attributes are:
 
@@ -1704,14 +1706,25 @@ number. A simple example would be
 	}
 
 which would simply return the first direction in the array of
-directions, ignoring all else.
+directions, ignoring all else.  If that's a little cryptic, it could
+also be written as
+
+	sub first_dir
+	{
+		my($direction_ref, $position_ref) = @_;
+
+		return ${$direction_ref}[0];
+	}
 
 If all directions were available, they would be passed in almost-sorted
 order: [North, West, South, East, Ceiling, Floor] for cell =>'Quad'
 mazes, [North, NorthWest, SouthWest, South, SouthEast, NorthEast,
-Ceiling, Floor] for cell => 'Hex' mazes.  These values are available by
-using the variable names $Games::Maze::North, $Games::Maze::NorthWest,
-$Games::Maze::West, et cetera.
+Ceiling, Floor] for cell => 'Hex' mazes.  This would mean that first_dir()
+would always return North unless it wasn't on the list, whereupon the next
+available direction would be tried.
+
+The direction values are available by using their variable names:
+$Games::Maze::North, $Games::Maze::NorthWest, $Games::Maze::West, et cetera.
 
 =item 'generate'
 
@@ -1726,39 +1739,39 @@ multiply-connected maze has one or more paths.
 
 =back
 
-=item make
+=head3 make
 
 $obj->make();
 
 Perform a random walk through the walls of the grid. This creates a
 simply-connected maze.
 
-=item solve
+=head3 solve
 
 $obj->solve();
 
 Finds a solution to the maze by examining a path until a
 dead end is reached.
 
-=item unsolve
+=head3 unsolve
 
 $obj->unsolve();
 
 Erase the path from the maze that was created by the solve() method.
 
-=item reset
+=head3 reset
 
 Resets the maze cells to their clean, unbroken state. You should not
 normally need to call this method, as the other methods will call it
 when needed.
 
-=item describe
+=head3 describe
 
 %maze_attributes = $obj->describe();
 
 Returns as a hash the attributes of the maze object.
 
-=item internals
+=head3 internals
 
 %maze_internals = $obj->internals();
 
@@ -1766,7 +1779,7 @@ Returns as a hash the 'hidden' internal values of the maze object,
 excepting the maze cell values, which can be retrieved via the
 to_hex_dump method.
 
-=item to_ascii
+=head3 to_ascii
 
 Translate the maze into a string of ascii 7-bit characters. If called in
 a list context, return as a list of levels. Otherwise returned as a
@@ -1779,7 +1792,7 @@ through the ceiling, floor, or both, respectively. The asterisk
 represents the path, which will only be present after invoking the
 solve() method.
 
-=item to_hex_dump
+=head3 to_hex_dump
 
 Returns a formatted hexadecimal string all of the cell values, including
 the border cells.
@@ -1787,8 +1800,6 @@ the border cells.
 If called in a list context, returns a list of strings, each one
 representing a level. If called in a scalar context, returns a single
 string, each level separated by a single newline.
-
-=back
 
 =head1 EXAMPLES
 
