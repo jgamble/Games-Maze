@@ -7,7 +7,7 @@ use warnings;
 use Carp;
 use Moose;
 
-our $VERSION = '1.004';
+our $VERSION = '1.04';
 
 
 our $North      = 0x0001;	# 0;
