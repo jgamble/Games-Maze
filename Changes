@@ -7,8 +7,67 @@ the version 2.00-track.  See the TODO file for more information.
 
 Revision history:
 
-0.01	Wed Apr 28 14:14:56 1999
-	- original version; created by h2xs 1.18
+1.04
+	Sun May 6 2012
+	- Some more documentation changes, including updating the
+	  e-mail address and adding some Build.PL instructions in
+	  the README file.
+
+	Fri May 4 2012
+	- Minimum perl requirement bumped up to 5.8.3, as module
+	  support code begins to drop 5.6 and related constructs.
+	- Updated the Build.PL file to meet current perl standards.
+
+1.03	Wed Feb 21 2007
+	- Some changes to the structure of the distribution directory
+	  in order to keep up with the current state of perl.
+	- Use Test::Simple for tests, Module::Build for buiding, and
+	  add a META.yml file.
+
+1.02	Mon Jun 03 19:29:53 2002
+	- Documentation fixes as pointed out by David Hand.
+
+1.01	Tue May 07 21:55:39 2002
+	- Bug fixes for bugs found by Pete Stewart.  Having added the 'entry'
+	  and 'exit' parameters, the case where those parameters aren't used
+	  became broken.
+	- Fix to two of the test files involving an unintialized variable.
+	- Add a Northward entry to the cell with the entrance.
+	  Hadn't done that before because the printing routine to_ascii()
+	  didn't need it, but now that another module will be using this,
+	  i need to knock down the wall on both the border and maze cells.
+	- Added the unsolve() method.
+
+1.0	Wed Apr 24 13:27:19 2002
+	- Hexagonal Hexagon mazes
+	- Big changes in the stringifying functions, mostly by deleting
+	  code, and fixing up the border cells values.
+	- The 'cols', 'rows', and 'lvls' parameters have been replaced by
+	  a single 'dimensions' parameter.
+	- New parameter 'start' tells the make() method where to start
+	  the random walk from.
+	- New parameter 'fn_choosedir' chooses which direction your random
+	  walk takes while making the maze.
+	- New parameters 'entry' and 'exit' let you place the beginning
+	  and ending points.
+
+0.9	Thu Oct 19 11:39:54 2000
+	- The maze object is now created via a call to
+	  Games::Maze->new() only.  The child classes ::Rect and
+	  ::Hex are dealt with in new().  The user need not deal
+	  with it at all.
+
+0.8	Wed Apr 19 10:57:35 2000
+	- Games::MazeFlat goes away.  There was no real reason
+	  beyond sentimentality to keep it.
+	- The direction values for all mazes are now the same.  South,
+	  for example, is now 0x20 for all mazes, instead of being 0x08
+	  for square mazes, and 0x10 for hexagon mazes.  This is an
+	  obvious thing to do in retrospect, but way back when they were
+	  separate programs with separate constants.
+	- This lets me move the contants and some more functions
+	  into the base class, which makes the reading of the hex
+	  dump easier.
 
 0.7	Tue Feb	8 16:51:03 2000
 	- Many incremental changes, leading up to:
@@ -25,57 +84,8 @@ Revision history:
 	     handles both the wall and the direction we face.
 	  5) "make test" has tests for the 48-bit rand() function.
 
-0.8	Wed Apr 19 10:57:35 2000
-	- Games::MazeFlat goes away.  There was no real reason
-	  beyond sentimentality to keep it.
-	- The direction values for all mazes are now the same.  South,
-	  for example, is now 0x20 for all mazes, instead of being 0x08
-	  for square mazes, and 0x10 for hexagon mazes.  This is an
-	  obvious thing to do in retrospect, but way back when they were
-	  separate programs with separate constants.
-	- This lets me move the contants and some more functions
-	  into the base class, which makes the reading of the hex
-	  dump easier.
-
-0.9	Thu Oct 19 11:39:54 2000
-	- The maze object is now created via a call to
-	  Games::Maze->new() only.  The child classes ::Rect and
-	  ::Hex are dealt with in new().  The user need not deal
-	  with it at all.
-
-1.0	Wed Apr 24 13:27:19 2002
-	- Hexagonal Hexagon mazes
-	- Big changes in the stringifying functions, mostly by deleting
-	  code, and fixing up the border cells values.
-	- The 'cols', 'rows', and 'lvls' parameters have been replaced by
-	  a single 'dimensions' parameter.
-	- New parameter 'start' tells the make() method where to start
-	  the random walk from.
-	- New parameter 'fn_choosedir' chooses which direction your random
-	  walk takes while making the maze.
-	- New parameters 'entry' and 'exit' let you place the beginning
-	  and ending points.
-
-1.01	Tue May 07 21:55:39 2002
-	- Bug fixes for bugs found by Pete Stewart.  Having added the 'entry'
-	  and 'exit' parameters, the case where those parameters aren't used
-	  became broken.
-	- Fix to two of the test files involving an unintialized variable.
-	- Add a Northward entry to the cell with the entrance.
-	  Hadn't done that before because the printing routine to_ascii()
-	  didn't need it, but now that another module will be using this,
-	  i need to knock down the wall on both the border and maze cells.
-	- Added the unsolve() method.
-
-1.02	Mon Jun 03 19:29:53 2002
-	- Documentation fixes as pointed out by David Hand.
-
-1.03	Wed Feb 21 2007
-	- Some changes to the structure of the distribution directory
-	  in order to keep up with the current state of perl.
-	- Use Test::Simple for tests, Module::Build for buiding, and
-	  add a META.yml file.
-
+0.01	Wed Apr 28 14:14:56 1999
+	- original version; created by h2xs 1.18
 
 HISTORY & BACKGROUND INFORMATION
 

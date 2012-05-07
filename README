@@ -1,4 +1,4 @@
-		Games::Maze
+		Games::Maze version 1.04
 
 Create Mazes as Objects.
 
@@ -17,7 +17,36 @@ print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
 
 INSTALLATION
 
-perl Makefile.PL
-make 
-make test 
-make install
+The usual way.  Unpack the archive:
+	gzip -d Games-Maze-1.04.tar.gz
+	tar xvf  Games-Maze-1.04.tar
+
+This package now uses Module::Build, and the Build.PL script
+but you can still use Makefile.PL, which is provided.
+
+Go to the resulting directory, and type:
+	perl Makefile.PL
+	make 
+
+Run the tests:
+	make test 
+
+Install the module:
+	make install
+
+Alternatively, you can use Build.PL:
+	perl Build.PL
+	Build
+
+Run the tests:
+	Build test
+
+Install the module:
+	Build install
+
+COPYRIGHT AND LICENSE
+
+Copyright (c) 2012 John M. Gamble.  All rights reserved.  This program is
+free software; you can redistribute it and/or modify it under the same
+terms as Perl itself.
+

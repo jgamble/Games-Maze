@@ -1,11 +1,13 @@
 package Games::Maze;
-require 5.6.0;
+require 5.8.3;
+
 use integer;
 use strict;
 use warnings;
 use Carp;
+use Moose;
 
-our $VERSION = '1.03';
+our $VERSION = '1.004';
 
 
 our $North      = 0x0001;	# 0;
@@ -95,6 +97,43 @@ my($Debug_internal) = 0;
 #
 # Valid options to new().
 #
+has 'dimensions' => {is => 'rw', required => 1,
+	isa => 'ArrayRef[Int]',
+	builder => '_set_dimensions',
+	trigger => '_valid_dimensions'};
+
+has 'entry' => {is => 'rw', required => 0,
+	isa => 'ArrayRef[Int]',
+	builder => '_set_entry',
+	trigger => '_valid_entry'};
+
+has 'exit' => {is => 'rw', required => 0,
+	isa => 'ArrayRef[Int]',
+	builder => '_set_exit',
+	trigger => '_valid_exit'};
+
+has 'start' => {is => 'rw', required => 0,
+	isa => 'ArrayRef[Int]',
+	builder => '_set_start',
+	trigger => '_valid_start'};
+
+has 'form' => {is => 'ro', required => 0,
+	isa => 'Str',
+	default => 'Rectangle'};
+
+has 'cell' => {is => 'ro', required => 0,
+	isa => 'Str',
+	default => 'Square'};
+
+has 'upcolumn' => {is => 'ro', required => 0,
+	isa => 'Str',
+	default => 'odd'};
+
+#
+# Random, Choose_dir, Generate, Connection, are now all part of the
+# Function, Make, and Output plugins.
+#
+
 my %valid = (
 	dimensions => 'array',
 	form => 'scalar',
@@ -106,7 +145,6 @@ my %valid = (
 	entry => 'array',
 	exit => 'array',
 	start => 'array',
-	inset_box => 'array',
 );
 
 #
@@ -115,7 +153,7 @@ my %valid = (
 # Creates the object with its attributes.  Valid attributes
 # are listed in the %valid hash.
 #
-sub new
+sub BUILD
 {
 	my $class = shift;
 	my $self = {};
@@ -156,13 +194,6 @@ sub new
 		push(@{ $self->{$key} }, @{ $keyval }) if ($ref_type eq 'array');
 	}
 
-	#
-	# Put in defaults for any unnamed but required parameters.
-	#
-	$self->{'dimensions'} ||= [3, 3, 1];
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 1);
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 2);
-	push @{ $self->{'dimensions'} }, 1 if (@{ $self->{'dimensions'} } < 3);
 
 	$self->{'form'} = ucfirst(lc $self->{'form'}) || 'Rectangle';
 	$self->{'cell'} = ucfirst(lc $self->{'cell'}) || 'Quad';
@@ -182,6 +213,51 @@ sub new
 
 	return $self->reset();
 }
+
+sub _set_dimensions
+{
+	$self->{dimensions} = [3, 3, 1];
+}
+
+
+sub _valid_dimensions
+{
+	my @d = @{ $self->{dimensions}};
+	@d = grep($_ > 1, @d);
+	$self->{dimensions} = [@d];
+
+	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 1);
+	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 2);
+	push @{ $self->{'dimensions'} }, 1 if (@{ $self->{'dimensions'} } < 3);
+}
+
+sub _set_entry
+{
+}
+
+sub _valid_entry
+{
+}
+
+
+sub _set_exit
+{
+}
+
+sub _valid_exit
+{
+}
+
+
+sub _set_start
+{
+}
+
+sub _valid_start
+{
+}
+
+
 
 #
 # describe
@@ -1835,5 +1911,5 @@ string, each level separated by a single newline.
 
 =head1 AUTHOR
 
-John M. Gamble may be found at B<jgamble@ripco.com>
+John M. Gamble may be found at B<jgamble@cpan.org>
 1;

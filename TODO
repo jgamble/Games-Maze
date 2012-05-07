@@ -7,6 +7,7 @@ The main feature that will appear in the version 2.00-track will be
 plug-ins for making the maze (I already have three different ones written).
 
 Output will be changed, and might be done with plug-ins as well.
+http://en.wikipedia.org/wiki/Box-drawing_characters
 
 I will keep the version 1.00-track Games::Maze on CPAN because there are
 some scripts and modules that use it, but any changes to it will be
