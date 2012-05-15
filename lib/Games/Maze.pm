@@ -5,7 +5,6 @@ use integer;
 use strict;
 use warnings;
 use Carp;
-use Moose;
 
 our $VERSION = '1.04';
 
@@ -94,40 +93,6 @@ my($Debug_make_ascii, $Debug_make_vx) = (0, 0);
 my($Debug_solve_ascii, $Debug_solve_vx) = (0, 0);
 my($Debug_internal) = 0;
 
-#
-# Valid options to new().
-#
-has 'dimensions' => {is => 'rw', required => 1,
-	isa => 'ArrayRef[Int]',
-	builder => '_set_dimensions',
-	trigger => '_valid_dimensions'};
-
-has 'entry' => {is => 'rw', required => 0,
-	isa => 'ArrayRef[Int]',
-	builder => '_set_entry',
-	trigger => '_valid_entry'};
-
-has 'exit' => {is => 'rw', required => 0,
-	isa => 'ArrayRef[Int]',
-	builder => '_set_exit',
-	trigger => '_valid_exit'};
-
-has 'start' => {is => 'rw', required => 0,
-	isa => 'ArrayRef[Int]',
-	builder => '_set_start',
-	trigger => '_valid_start'};
-
-has 'form' => {is => 'ro', required => 0,
-	isa => 'Str',
-	default => 'Rectangle'};
-
-has 'cell' => {is => 'ro', required => 0,
-	isa => 'Str',
-	default => 'Square'};
-
-has 'upcolumn' => {is => 'ro', required => 0,
-	isa => 'Str',
-	default => 'odd'};
 
 #
 # Random, Choose_dir, Generate, Connection, are now all part of the
@@ -153,7 +118,7 @@ my %valid = (
 # Creates the object with its attributes.  Valid attributes
 # are listed in the %valid hash.
 #
-sub BUILD
+sub new
 {
 	my $class = shift;
 	my $self = {};
