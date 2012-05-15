@@ -11,7 +11,7 @@ my $build = Module::Build->new(
 	dist_name => 'Games-Mazes',
 
 	requires => { perl=> '5.8.3' },
-	configure_requires => { 'Module::Build => '0.3624'},
+	configure_requires => { 'Module::Build' => '0.3624'},
 	build_requires => { 'Test::Simple' => 0 },
 
 	license => 'perl',

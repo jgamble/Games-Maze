@@ -167,8 +167,8 @@ sub new
 	push @{ $self->{dimensions} }, 3 if (@{ $self->{dimensions} } < 2);
 	push @{ $self->{dimensions} }, 1 if (@{ $self->{dimensions} } < 3);
 
-	$self->{form} = ucfirst(lc $self->{form}) || 'Rectangle';
-	$self->{cell} = ucfirst(lc $self->{cell}) || 'Quad';
+	$self->{form} = ucfirst lc($self->{form} || 'Rectangle');
+	$self->{cell} = ucfirst lc($self->{cell} || 'Quad');
 
 	unless ($self->{form} =~ /^(?:Rectangle|Hexagon)$/)
 	{
