@@ -95,8 +95,7 @@ my($Debug_internal) = 0;
 
 
 #
-# Random, Choose_dir, Generate, Connection, are now all part of the
-# Function, Make, and Output plugins.
+# Valid options to new().
 #
 
 my %valid = (
@@ -160,6 +159,14 @@ sub new
 	}
 
 
+	#
+	# Put in defaults for any unnamed but required parameters.
+	#
+	$self->{dimensions} ||= [3, 3, 1];
+	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 1);
+	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 2);
+	push @{ $self->{'dimensions'} }, 1 if (@{ $self->{'dimensions'} } < 3);
+
 	$self->{'form'} = ucfirst(lc $self->{'form'}) || 'Rectangle';
 	$self->{'cell'} = ucfirst(lc $self->{'cell'}) || 'Quad';
 
@@ -178,50 +185,6 @@ sub new
 
 	return $self->reset();
 }
-
-sub _set_dimensions
-{
-	$self->{dimensions} = [3, 3, 1];
-}
-
-
-sub _valid_dimensions
-{
-	my @d = @{ $self->{dimensions}};
-	@d = grep($_ > 1, @d);
-	$self->{dimensions} = [@d];
-
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 1);
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 2);
-	push @{ $self->{'dimensions'} }, 1 if (@{ $self->{'dimensions'} } < 3);
-}
-
-sub _set_entry
-{
-}
-
-sub _valid_entry
-{
-}
-
-
-sub _set_exit
-{
-}
-
-sub _valid_exit
-{
-}
-
-
-sub _set_start
-{
-}
-
-sub _valid_start
-{
-}
-
 
 
 #
