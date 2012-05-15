@@ -163,25 +163,25 @@ sub new
 	# Put in defaults for any unnamed but required parameters.
 	#
 	$self->{dimensions} ||= [3, 3, 1];
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 1);
-	push @{ $self->{'dimensions'} }, 3 if (@{ $self->{'dimensions'} } < 2);
-	push @{ $self->{'dimensions'} }, 1 if (@{ $self->{'dimensions'} } < 3);
+	push @{ $self->{dimensions} }, 3 if (@{ $self->{dimensions} } < 1);
+	push @{ $self->{dimensions} }, 3 if (@{ $self->{dimensions} } < 2);
+	push @{ $self->{dimensions} }, 1 if (@{ $self->{dimensions} } < 3);
 
-	$self->{'form'} = ucfirst(lc $self->{'form'}) || 'Rectangle';
-	$self->{'cell'} = ucfirst(lc $self->{'cell'}) || 'Quad';
+	$self->{form} = ucfirst(lc $self->{form}) || 'Rectangle';
+	$self->{cell} = ucfirst(lc $self->{cell}) || 'Quad';
 
-	unless ($self->{'form'} =~ /^(?:Rectangle|Hexagon)$/)
+	unless ($self->{form} =~ /^(?:Rectangle|Hexagon)$/)
 	{
-		carp "Unknown form type ", $self->{'form'};
+		carp "Unknown form type ", $self->{form};
 		return undef;
 	}
-	unless ($self->{'cell'} =~ /^(?:Quad|Hex)$/)
+	unless ($self->{cell} =~ /^(?:Quad|Hex)$/)
 	{
-		carp "Unknown cell type ", $self->{'cell'};
+		carp "Unknown cell type ", $self->{cell};
 		return undef;
 	}
 
-	bless($self, $class . "::" . $self->{'cell'});
+	bless($self, $class . "::" . $self->{cell});
 
 	return $self->reset();
 }
@@ -233,7 +233,7 @@ sub reset
 	my($l, $c, $r);
 
 	$self->{'_corn'} = ([]);
-	$self->{'form'} = 'Rectangle' unless (exists $self->{'form'});
+	$self->{form} = 'Rectangle' unless (exists $self->{form});
 	$self->{'generate'} = 'Random';
 	$self->{'connect'} = 'Simple';
 
@@ -515,8 +515,8 @@ sub _get_entry_exit
 {
 	my $self = shift;
 
-	return (@{ $self->{'entry'} },
-		@{ $self->{'exit'} });
+	return (@{ $self->{entry} },
+		@{ $self->{exit} });
 }
 
 #
@@ -706,9 +706,9 @@ sub _set_internals
 	#
 	# Check the dimensions for correctness.
 	#
-	my($cols, $rows, $lvls) = @{ $self->{'dimensions'} };
+	my($cols, $rows, $lvls) = @{ $self->{dimensions} };
 
-	if ($self->{'form'} eq 'Rectangle')
+	if ($self->{form} eq 'Rectangle')
 	{
 		if ($cols < 2 or $rows < 2 or $lvls < 1)
 		{
@@ -728,9 +728,9 @@ sub _set_internals
 	#
 	# Ensure that the starting point is set correctly.
 	#
-	if (defined $self->{'start'})
+	if (defined $self->{start})
 	{
-		my @start = @{ $self->{'start'} };
+		my @start = @{ $self->{start} };
 
 		if ((not defined $start[0]) or
 			$start[0] < 1 or $start[0] > $self->{'_cols'})
@@ -750,7 +750,7 @@ sub _set_internals
 			$start[2] = int(rand($self->{'_lvls'})) + 1;
 		}
 
-		$self->{'start'} = \@start;
+		$self->{start} = \@start;
 	}
 
 	my $m = $self->{'_corn'};
@@ -797,9 +797,9 @@ sub _set_entry_exit
 	my $self = shift;
 	my $m = $self->{'_corn'};
 
-	if (defined $self->{'entry'})
+	if (defined $self->{entry})
 	{
-		my @entry = @{ $self->{'entry'} };
+		my @entry = @{ $self->{entry} };
 
 		if ($entry[0] < 1 or $entry[0] > $self->{'_cols'})
 		{
@@ -810,16 +810,16 @@ sub _set_entry_exit
 		$entry[1] = 1;
 		$entry[2] = 1;
 
-		$self->{'entry'} = \@entry;
+		$self->{entry} = \@entry;
 	}
 	else
 	{
-		$self->{'entry'} = [int(rand($self->{'_cols'})) + 1, 1, 1];
+		$self->{entry} = [int(rand($self->{'_cols'})) + 1, 1, 1];
 	}
 
-	if (defined $self->{'exit'})
+	if (defined $self->{exit})
 	{
-		my @exit = @{ $self->{'exit'} };
+		my @exit = @{ $self->{exit} };
 
 		if ($exit[0] < 1 or $exit[0] > $self->{'_cols'})
 		{
@@ -829,11 +829,11 @@ sub _set_entry_exit
 	
 		$exit[1] = $self->{'_rows'};
 		$exit[2] = $self->{'_lvls'};
-		$self->{'exit'} = \@exit;
+		$self->{exit} = \@exit;
 	}
 	else
 	{
-		$self->{'exit'} = [int(rand($self->{'_cols'})) + 1,
+		$self->{exit} = [int(rand($self->{'_cols'})) + 1,
 					$self->{'_rows'},
 					$self->{'_lvls'}];
 	}
@@ -850,7 +850,7 @@ sub _get_start_point
 {
 	my $self = shift;
 
-	return @{ $self->{'start'} } if (defined $self->{'start'});
+	return @{ $self->{start} } if (defined $self->{start});
 
 	return (
 		int(rand($self->{'_cols'})) + 1,
@@ -1090,9 +1090,9 @@ sub _set_internals
 	#
 	# Check the dimensions for correctness.
 	#
-	my($cols, $rows, $lvls) = @{ $self->{'dimensions'} };
+	my($cols, $rows, $lvls) = @{ $self->{dimensions} };
 
-	if ($self->{'form'} eq 'Rectangle')
+	if ($self->{form} eq 'Rectangle')
 	{
 		if ($cols < 2 or $rows < 2 or $lvls < 1)
 		{
@@ -1100,12 +1100,12 @@ sub _set_internals
 			return undef;
 		}
 
-		$self->{'upcolumn_even'} = 0 unless (defined $self->{'upcolumn_even'});
+		$self->{upcolumn_even} = 0 unless (defined $self->{upcolumn_even});
 		$self->{'_rows'} = $rows;
 		$self->{'_cols'} = $cols;
 		$self->{'_lvls'} = $lvls;
 	}
-	elsif ($self->{'form'} eq 'Hexagon')
+	elsif ($self->{form} eq 'Hexagon')
 	{
 		if ($cols < 2 or $rows < 1 or $lvls < 1)
 		{
@@ -1113,7 +1113,7 @@ sub _set_internals
 			return undef;
 		}
 
-		$self->{'upcolumn_even'} = 1 - ($cols & 1);
+		$self->{upcolumn_even} = 1 - ($cols & 1);
 		$self->{'_rows'} = $rows + $cols - 1;
 		$self->{'_cols'} = $cols * 2 - 1;
 		$self->{'_lvls'} = $lvls;
@@ -1127,9 +1127,9 @@ sub _set_internals
 	#
 	# Ensure that the starting point is set correctly.
 	#
-	if (defined $self->{'start'})
+	if (defined $self->{start})
 	{
-		my @start = @{ $self->{'start'} };
+		my @start = @{ $self->{start} };
 
 		if ((not defined $start[0]) or
 			$start[0] < 1 or $start[0] > $self->{'_cols'})
@@ -1151,7 +1151,7 @@ sub _set_internals
 			$start[2] = int(rand($self->{'_lvls'})) + 1;
 		}
 
-		$self->{'start'} = \@start;
+		$self->{start} = \@start;
 	}
 
 	my $m = $self->{'_corn'};
@@ -1170,7 +1170,7 @@ sub _set_internals
 	#
 	# Set the border cells.
 	#
-	if ($self->{'form'} eq 'Rectangle')
+	if ($self->{form} eq 'Rectangle')
 	{
 		#
 		# North and South boundry.
@@ -1227,7 +1227,7 @@ sub _set_internals
 			$$m[1][$self->{'_rows'} + 1][$self->{'_cols'} + 1] |= $NorthWest;
 		}
 	}
-	elsif ($self->{'form'} eq 'Hexagon')
+	elsif ($self->{form} eq 'Hexagon')
 	{
 		my $allwalls = $North|$NorthWest|$SouthWest|$South|$SouthEast|$NorthEast;
 
@@ -1315,9 +1315,9 @@ sub _set_entry_exit
 	my $self = shift;
 	my $m = $self->{'_corn'};
 
-	if (defined $self->{'entry'})
+	if (defined $self->{entry})
 	{
-		my @entry = @{ $self->{'entry'} };
+		my @entry = @{ $self->{entry} };
 
 		if ($entry[0] < 1 or $entry[0] > $self->{'_cols'})
 		{
@@ -1328,7 +1328,7 @@ sub _set_entry_exit
 		($entry[1], undef) = $self->_first_last_row($entry[0]);
 		$entry[2] = 1;
 
-		$self->{'entry'} = \@entry;
+		$self->{entry} = \@entry;
 	}
 	else
 	{
@@ -1337,12 +1337,12 @@ sub _set_entry_exit
 		($entry[1], undef) = $self->_first_last_row($entry[0]);
 		$entry[2] = 1;
 
-		$self->{'entry'} = \@entry;
+		$self->{entry} = \@entry;
 	}
 
-	if (defined $self->{'exit'})
+	if (defined $self->{exit})
 	{
-		my @exit = @{ $self->{'exit'} };
+		my @exit = @{ $self->{exit} };
 
 		if ($exit[0] < 1 or $exit[0] > $self->{'_cols'})
 		{
@@ -1353,7 +1353,7 @@ sub _set_entry_exit
 		(undef, $exit[1]) = $self->_first_last_row($exit[0]);
 		$exit[2] = $self->{'_lvls'};
 
-		$self->{'exit'} = \@exit;
+		$self->{exit} = \@exit;
 	}
 	else
 	{
@@ -1362,7 +1362,7 @@ sub _set_entry_exit
 		(undef, $exit[1]) = $self->_first_last_row($exit[0]);
 		$exit[2] = $self->{'_lvls'};
 
-		$self->{'exit'} = \@exit;
+		$self->{exit} = \@exit;
 	}
 
 	return $self;
@@ -1377,7 +1377,7 @@ sub _get_start_point
 {
 	my $self = shift;
 
-	return @{ $self->{'start'} } if (defined $self->{'start'});
+	return @{ $self->{start} } if (defined $self->{start});
 
 	my $c = int(rand($self->{'_cols'})) + 1;
 	my($row_start, $row_end) = $self->_first_last_row($c);
@@ -1525,7 +1525,7 @@ sub _up_column
 {
 	my $self = shift;
 	my($c) = @_;
-	return 1 & ($c ^ $self->{'upcolumn_even'});
+	return 1 & ($c ^ $self->{upcolumn_even});
 }
 
 #
@@ -1539,7 +1539,7 @@ sub _first_last_col
 	my $self = shift;
 	my($r) = @_;
 
-	if ($self->{'form'} eq 'Hexagon')
+	if ($self->{form} eq 'Hexagon')
 	{
 		my $mid_c = ($self->{'_cols'} + 1)/2;
 		my $ante_r = $self->{'_cols'}/4;
@@ -1581,14 +1581,14 @@ sub _first_last_row
 	my $self = shift;
 	my $c = $_[0];
 
-	if ($self->{'form'} eq 'Hexagon')
+	if ($self->{form} eq 'Hexagon')
 	{
 		#
 		# Find how far off $c is from the midpoint (in the
 		# Hexagon form, the columns dimension is the midpoint of
 		# '_cols').
 		#
-		my $offset_c = abs(${ $self->{'dimensions'} }[0] - $c);
+		my $offset_c = abs(${ $self->{dimensions} }[0] - $c);
 
 		return ($offset_c/2 + 1,
 			$self->{'_rows'} - ($offset_c + 1)/2);
