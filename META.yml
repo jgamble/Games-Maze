@@ -1,11 +1,36 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Games-Maze
-version:      1.03
-version_from: lib/Games/Maze.pm
-installdirs:  site
+---
+abstract: 'Create Mazes'
+author:
+  - 'John M. Gamble <jgamble@cpan.org>'
+build_requires:
+  Test::Simple: 0
+configure_requires:
+  Module::Build: 0.3624
+dynamic_config: 1
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112621'
+keywords:
+  - games
+  - maze
+  - mazes
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Games-Mazes
+provides:
+  Games::Maze:
+    file: lib/Games/Maze.pm
+    version: 1.04
+  Games::Maze::Hex:
+    file: lib/Games/Maze.pm
+    version: 0
+  Games::Maze::Quad:
+    file: lib/Games/Maze.pm
+    version: 0
 requires:
-    Test::Simple:                  0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+  perl: v5.8.3
+resources:
+  license: http://dev.perl.org/licenses/
+version: 1.04
+x_resourses:
+  repository: git://github.com/jgamble/Games-Maze.git

@@ -1,7 +1,10 @@
 Build.PL
 Changes
 MANIFEST
+META.json
 META.yml
+MYMETA.json
+MYMETA.yml
 Makefile.PL
 eg/mz.pl
 lib/Games/Maze.pm

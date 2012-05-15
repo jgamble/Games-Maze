@@ -1,0 +1,18 @@
+---
+abstract: unknown
+author:
+  - unknown
+build_requires:
+  Test::Simple: 0
+dynamic_config: 0
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112621'
+license: unknown
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Games-Maze
+requires:
+  perl: v5.8.3
+version: 1.03
+x_installdirs: site
+x_version_from: lib/Games/Maze.pm

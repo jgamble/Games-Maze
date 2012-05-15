@@ -8,6 +8,12 @@ the version 2.00-track.  See the TODO file for more information.
 Revision history:
 
 1.04
+	Tue May 15 2012
+	- The lc operator now complains about undef values in
+	  modern (5.14 right now) perl. Made the undef checking
+	  more robust.
+	- Changed old style {'quoted'} hash keys to {barewords}.
+
 	Sun May 6 2012
 	- Some more documentation changes, including updating the
 	  e-mail address and adding some Build.PL instructions in
