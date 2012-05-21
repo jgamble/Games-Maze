@@ -1,18 +1,36 @@
 ---
-abstract: unknown
+abstract: 'Create Mazes'
 author:
-  - unknown
+  - 'John M. Gamble <jgamble@cpan.org>'
 build_requires:
   Test::Simple: 0
+configure_requires:
+  Module::Build: 0.3624
 dynamic_config: 0
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112621'
-license: unknown
+generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.112150'
+keywords:
+  - games
+  - maze
+  - mazes
+license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
-name: Games-Maze
+name: Games-Mazes
+provides:
+  Games::Maze:
+    file: lib/Games/Maze.pm
+    version: 1.04
+  Games::Maze::Hex:
+    file: lib/Games/Maze.pm
+    version: 0
+  Games::Maze::Quad:
+    file: lib/Games/Maze.pm
+    version: 0
 requires:
   perl: v5.8.3
-version: 1.03
-x_installdirs: site
-x_version_from: lib/Games/Maze.pm
+resources:
+  license: http://dev.perl.org/licenses/
+version: 1.04
+x_resourses:
+  repository: git://github.com/jgamble/Games-Maze.git
