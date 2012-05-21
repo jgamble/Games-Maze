@@ -1,5 +1,5 @@
 package Games::Maze;
-require 5.8.3;
+use 5.008003;
 
 use integer;
 use strict;
@@ -609,7 +609,6 @@ sub _on_pathmark
 package Games::Maze::Quad;
 use parent -norequire, 'Games::Maze';
 
-require 5.6.0;
 use integer;
 use strict;
 use warnings;
@@ -957,7 +956,6 @@ sub _next_direct
 package Games::Maze::Hex;
 use parent -norequire, 'Games::Maze';
 
-require 5.6.0;
 use integer;
 use strict;
 use warnings;
@@ -1622,7 +1620,7 @@ Games::Maze - Create Mazes as Objects.
 
 =head1 PREREQUISITES
 
-Perl 5.6 or later. This is the version of perl under which this module
+Perl 5.8.3 or later. This is the version of perl under which this module
 was developed.
 
 =head1 DESCRIPTION
