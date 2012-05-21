@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 
 our $North      = 0x0001;	# 0;
@@ -232,23 +232,23 @@ sub reset
 	my $self = shift;
 	my($l, $c, $r);
 
-	$self->{'_corn'} = ([]);
+	$self->{_corn} = ([]);
 	$self->{form} = 'Rectangle' unless (exists $self->{form});
-	$self->{'generate'} = 'Random';
-	$self->{'connect'} = 'Simple';
+	$self->{generate} = 'Random';
+	$self->{connect} = 'Simple';
 
 	return undef unless ($self->_set_internals());
 
 	#
 	# Now that we've got one level reset, copy it to the rest.
 	#
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
-	foreach $l (2..$self->{'_lvls'})
+	foreach $l (2..$self->{_lvls})
 	{
-		foreach $r (0..$self->{'_rows'} + 1)
+		foreach $r (0..$self->{_rows} + 1)
 		{
-			foreach $c (0..$self->{'_cols'} + 1)
+			foreach $c (0..$self->{_cols} + 1)
 			{
 				$$m[$l][$r][$c] = $$m[1][$r][$c];
 			}
@@ -258,12 +258,12 @@ sub reset
 	#
 	# Top and bottom border levels.  Removing the floor is good enough.
 	#
-	foreach $r (0..$self->{'_rows'} + 1)
+	foreach $r (0..$self->{_rows} + 1)
 	{
-		foreach $c (0..$self->{'_cols'} + 1)
+		foreach $c (0..$self->{_cols} + 1)
 		{
 			$$m[0][$r][$c] =
-				$$m[$self->{'_lvls'} + 1][$r][$c] = $Floor;
+				$$m[$self->{_lvls} + 1][$r][$c] = $Floor;
 		}
 	}
 
@@ -273,7 +273,7 @@ sub reset
 	#
 	$self->_set_entry_exit();
 
-	$self->{'_status'} = 'reset';
+	$self->{_status} = 'reset';
 	return $self;
 }
 
@@ -291,9 +291,9 @@ sub make
 	my(@queue, @dir);
 
 	my($c, $r, $l) = $self->_get_start_point();
-	my $choose_dir = $self->{'fn_choosedir'} || \&_random_dir;
+	my $choose_dir = $self->{fn_choosedir} || \&_random_dir;
 
-	$self->reset() if ($self->{'_status'} ne 'reset');
+	$self->reset() if ($self->{_status} ne 'reset');
 
 	for (;;)
 	{
@@ -327,7 +327,7 @@ sub make
 	}
 
 	$self->_add_egress();
-	$self->{'_status'} = 'make';
+	$self->{_status} = 'make';
 	return $self;
 }
 
@@ -343,7 +343,7 @@ sub solve
 {
 	my $self = shift;
 
-	$self = $self->make() if ($self->{'_status'} ne 'make');
+	$self = $self->make() if ($self->{_status} ne 'make');
 	return undef unless ($self);
 
 	my $dir = $North;;
@@ -384,7 +384,7 @@ sub solve
 		print $self->to_ascii() if ($Debug_solve_ascii);
 	}
 
-	$self->{'_status'} = 'solve';
+	$self->{_status} = 'solve';
 	return $self;
 }
 
@@ -399,25 +399,25 @@ sub unsolve
 {
 	my $self = shift;
 
-	return $self if ($self->{'_status'} eq 'make');
+	return $self if ($self->{_status} eq 'make');
 
-	if ($self->{'_status'} eq 'solve')
+	if ($self->{_status} eq 'solve')
 	{
-		my $m = $self->{'_corn'};
+		my $m = $self->{_corn};
 		my $allwalls = $North|$NorthWest|$West|$SouthWest|$Ceiling|
 				$South|$SouthEast|$East|$NorthEast|$Floor;
 
-		foreach my $l (1..$self->{'_lvls'})
+		foreach my $l (1..$self->{_lvls})
 		{
-			foreach my $r (1..$self->{'_rows'})
+			foreach my $r (1..$self->{_rows})
 			{
-				foreach my $c (1..$self->{'_cols'})
+				foreach my $c (1..$self->{_cols})
 				{
 					$$m[$l][$r][$c] &= $allwalls;
 				}
 			}
 		}
-		$self->{'_status'} = 'make';
+		$self->{_status} = 'make';
 	}
 	else
 	{
@@ -443,15 +443,15 @@ sub unsolve
 sub to_hex_dump
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my @levels;
 
-	foreach my $l (1..$self->{'_lvls'})
+	foreach my $l (1..$self->{_lvls})
 	{
 		my $vxstr = "";
-		foreach my $r (0..$self->{'_rows'} + 1)
+		foreach my $r (0..$self->{_rows} + 1)
 		{
-			foreach my $c (0..$self->{'_cols'} + 1)
+			foreach my $c (0..$self->{_cols} + 1)
 			{
 				$vxstr .= sprintf(" %04x", $$m[$l][$r][$c]);
 			}
@@ -482,15 +482,15 @@ sub _copy
 		$self->{$k} = $other->{$k};
 	}
 
-	$self->{'_corn'} = ([]);
-	my $m = $self->{'_corn'};
-	my $o = $other->{'_corn'};
+	$self->{_corn} = ([]);
+	my $m = $self->{_corn};
+	my $o = $other->{_corn};
 
-	foreach my $l (0..$other->{'_lvls'} + 1)
+	foreach my $l (0..$other->{_lvls} + 1)
 	{
-		foreach my $r (0..$other->{'_rows'} + 1)
+		foreach my $r (0..$other->{_rows} + 1)
 		{
-			foreach my $c (0..$other->{'_cols'} + 1)
+			foreach my $c (0..$other->{_cols} + 1)
 			{
 				$$m[$l][$r][$c] = $$o[$l][$r][$c];
 			}
@@ -525,7 +525,7 @@ sub _get_entry_exit
 sub _add_egress
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	my @egress = $self->_get_entry_exit();
 
@@ -554,7 +554,7 @@ sub _break_thru
 {
 	my $self = shift;
 	my($wall, $c, $r, $l) = @_;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	$$m[$l][$r][$c] |= $wall;
 	($wall, $c, $r, $l) = $self->_move_thru($wall, $c, $r, $l);
@@ -570,7 +570,7 @@ sub _wall_open
 {
 	my $self = shift;
 	my($dir, $c, $r, $l) = @_;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	return ($$m[$l][$r][$c] & $dir) != 0;
 }
@@ -584,7 +584,7 @@ sub _toggle_pathmark
 {
 	my $self = shift;
 	my($c, $r, $l) = @_;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	$$m[$l][$r][$c] ^= $Path_Mark;
 }
@@ -596,7 +596,7 @@ sub _on_pathmark
 {
 	my $self = shift;
 	my($c, $r, $l) = @_;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	return (($$m[$l][$r][$c] & $Path_Mark) == $Path_Mark);
 }
@@ -607,8 +607,7 @@ sub _on_pathmark
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Quad;
-use Games::Maze;
-use base qw(Games::Maze);
+use parent -norequire, 'Games::Maze';
 
 require 5.6.0;
 use integer;
@@ -626,7 +625,7 @@ use Carp;
 sub to_ascii
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my @levels = ();
 	my($c, $r, $l);
 
@@ -654,23 +653,23 @@ sub to_ascii
 		($West|$Path_Mark|$Floor|$Ceiling   , " b*")
 	);
 
-	foreach $l (1..$self->{'_lvls'})
+	foreach $l (1..$self->{_lvls})
 	{
 		my $lvlstr = "";
 
 		#
 		# End of all rows for this level.  Print the closing South walls.
 		#
-		foreach $c (1..$self->{'_cols'} + 1)
+		foreach $c (1..$self->{_cols} + 1)
 		{
 			$lvlstr .= $horiz_walls{$$m[$l][0][$c] & $South};
 		}
 
 		$lvlstr .= "\n";
 
-		foreach $r (1..$self->{'_rows'})
+		foreach $r (1..$self->{_rows})
 		{
-			foreach $c (1..$self->{'_cols'} + 1)
+			foreach $c (1..$self->{_cols} + 1)
 			{
 				my($v) = $$m[$l][$r][$c] & ($West|$Path_Mark|$Floor|$Ceiling);
 				$lvlstr .= $verti_walls{$v};
@@ -679,7 +678,7 @@ sub to_ascii
 
 			$lvlstr .= "\n";
 
-			foreach $c (1..$self->{'_cols'} + 1)
+			foreach $c (1..$self->{_cols} + 1)
 			{
 				$lvlstr .= $horiz_walls{$$m[$l][$r][$c] & $South};
 			}
@@ -715,9 +714,9 @@ sub _set_internals
 			carp "Minimum column, row, and level dimensions are 2, 2, 1";
 			return undef;
 		}
-		$self->{'_rows'} = $rows;
-		$self->{'_cols'} = $cols;
-		$self->{'_lvls'} = $lvls;
+		$self->{_rows} = $rows;
+		$self->{_cols} = $cols;
+		$self->{_lvls} = $lvls;
 	}
 	else
 	{
@@ -733,35 +732,35 @@ sub _set_internals
 		my @start = @{ $self->{start} };
 
 		if ((not defined $start[0]) or
-			$start[0] < 1 or $start[0] > $self->{'_cols'})
+			$start[0] < 1 or $start[0] > $self->{_cols})
 		{
-			$start[0] = int(rand($self->{'_cols'})) + 1;
+			$start[0] = int(rand($self->{_cols})) + 1;
 			carp "Start column $start[0] is out of range.\n";
 		}
 		if ((not defined $start[1]) or
-			$start[1] < 1 or $start[1] > $self->{'_rows'})
+			$start[1] < 1 or $start[1] > $self->{_rows})
 		{
-			$start[1] = int(rand($self->{'_rows'})) + 1;
+			$start[1] = int(rand($self->{_rows})) + 1;
 			carp "Start row $start[1] is out of range.\n";
 		}
 		if ((not defined $start[2])
-			or $start[2] < 1 or $start[2] > $self->{'_rows'})
+			or $start[2] < 1 or $start[2] > $self->{_rows})
 		{
-			$start[2] = int(rand($self->{'_lvls'})) + 1;
+			$start[2] = int(rand($self->{_lvls})) + 1;
 		}
 
 		$self->{start} = \@start;
 	}
 
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my $allwalls = $North | $West | $South | $East;
 
 	#
 	# Reset the center cells to unbroken.
 	#
-	foreach $r (1..$self->{'_rows'})
+	foreach $r (1..$self->{_rows})
 	{
-		foreach $c (1..$self->{'_cols'})
+		foreach $c (1..$self->{_cols})
 		{
 			$$m[1][$r][$c] = 0;
 		}
@@ -770,18 +769,18 @@ sub _set_internals
 	#
 	# Set the border cells.
 	#
-	foreach $r (0..$self->{'_rows'} + 1)
+	foreach $r (0..$self->{_rows} + 1)
 	{
-		$$m[1][$r][$self->{'_cols'} + 1] = $North | $South | $East;
+		$$m[1][$r][$self->{_cols} + 1] = $North | $South | $East;
 		$$m[1][$r][0] = $allwalls;
 	}
-	foreach $c (0..$self->{'_cols'} + 1)
+	foreach $c (0..$self->{_cols} + 1)
 	{
-		$$m[1][$self->{'_rows'} + 1][$c] = $allwalls;
+		$$m[1][$self->{_rows} + 1][$c] = $allwalls;
 		$$m[1][0][$c] = $North | $West | $East;
 	}
 
-	$$m[1][0][$self->{'_cols'} + 1] |= $South;
+	$$m[1][0][$self->{_cols} + 1] |= $South;
 
 	return $self;
 }
@@ -795,15 +794,15 @@ sub _set_internals
 sub _set_entry_exit
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	if (defined $self->{entry})
 	{
 		my @entry = @{ $self->{entry} };
 
-		if ($entry[0] < 1 or $entry[0] > $self->{'_cols'})
+		if ($entry[0] < 1 or $entry[0] > $self->{_cols})
 		{
-			$entry[0] = int(rand($self->{'_cols'})) + 1;
+			$entry[0] = int(rand($self->{_cols})) + 1;
 			carp "Entry column $entry[0] is out of range.\n";
 		}
 
@@ -814,28 +813,28 @@ sub _set_entry_exit
 	}
 	else
 	{
-		$self->{entry} = [int(rand($self->{'_cols'})) + 1, 1, 1];
+		$self->{entry} = [int(rand($self->{_cols})) + 1, 1, 1];
 	}
 
 	if (defined $self->{exit})
 	{
 		my @exit = @{ $self->{exit} };
 
-		if ($exit[0] < 1 or $exit[0] > $self->{'_cols'})
+		if ($exit[0] < 1 or $exit[0] > $self->{_cols})
 		{
-			$exit[0] = int(rand($self->{'_cols'})) + 1;
+			$exit[0] = int(rand($self->{_cols})) + 1;
 			carp "Exit column $exit[0] is out of range.\n";
 		}
 	
-		$exit[1] = $self->{'_rows'};
-		$exit[2] = $self->{'_lvls'};
+		$exit[1] = $self->{_rows};
+		$exit[2] = $self->{_lvls};
 		$self->{exit} = \@exit;
 	}
 	else
 	{
-		$self->{exit} = [int(rand($self->{'_cols'})) + 1,
-					$self->{'_rows'},
-					$self->{'_lvls'}];
+		$self->{exit} = [int(rand($self->{_cols})) + 1,
+					$self->{_rows},
+					$self->{_lvls}];
 	}
 
 	return $self;
@@ -853,9 +852,9 @@ sub _get_start_point
 	return @{ $self->{start} } if (defined $self->{start});
 
 	return (
-		int(rand($self->{'_cols'})) + 1,
-		int(rand($self->{'_rows'})) + 1,
-		int(rand($self->{'_lvls'})) + 1
+		int(rand($self->{_cols})) + 1,
+		int(rand($self->{_rows})) + 1,
+		int(rand($self->{_lvls})) + 1
 	);
 }
 
@@ -903,7 +902,7 @@ sub _move_thru
 sub _collect_dirs
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my @dir;
 	my($c, $r, $l) = @_;
 
@@ -956,8 +955,7 @@ sub _next_direct
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Hex;
-use Games::Maze;
-use base qw(Games::Maze);
+use parent -norequire, 'Games::Maze';
 
 require 5.6.0;
 use integer;
@@ -975,7 +973,7 @@ use Carp;
 sub to_ascii
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my($c, $r, $l, @levels);
 
 	my(%upper_west) = (
@@ -1003,9 +1001,9 @@ sub to_ascii
 		($SouthWest | $South, '   '),
 	);
 
-	my $rlim = $self->{'_rows'} + 1;
+	my $rlim = $self->{_rows} + 1;
 
-	foreach $l (1..$self->{'_lvls'})
+	foreach $l (1..$self->{_lvls})
 	{
 		#
 		# Print the top line of the border (the underscores on the
@@ -1013,7 +1011,7 @@ sub to_ascii
 		#
 		my $lvlstr = "";
 
-		foreach $c (1..$self->{'_cols'})
+		foreach $c (1..$self->{_cols})
 		{
 			if ($self->_up_column($c))
 			{
@@ -1033,7 +1031,7 @@ sub to_ascii
 		foreach $r (1..$rlim)
 		{
 #			my($clim1, $clim2) = $self->_first_last_col($r);
-			my($clim2) = $self->{'_cols'};
+			my($clim2) = $self->{_cols};
 
 			#
 			# It takes two lines to print out the hexagon, or parts of the
@@ -1101,9 +1099,9 @@ sub _set_internals
 		}
 
 		$self->{upcolumn_even} = 0 unless (defined $self->{upcolumn_even});
-		$self->{'_rows'} = $rows;
-		$self->{'_cols'} = $cols;
-		$self->{'_lvls'} = $lvls;
+		$self->{_rows} = $rows;
+		$self->{_cols} = $cols;
+		$self->{_lvls} = $lvls;
 	}
 	elsif ($self->{form} eq 'Hexagon')
 	{
@@ -1114,9 +1112,9 @@ sub _set_internals
 		}
 
 		$self->{upcolumn_even} = 1 - ($cols & 1);
-		$self->{'_rows'} = $rows + $cols - 1;
-		$self->{'_cols'} = $cols * 2 - 1;
-		$self->{'_lvls'} = $lvls;
+		$self->{_rows} = $rows + $cols - 1;
+		$self->{_cols} = $cols * 2 - 1;
+		$self->{_lvls} = $lvls;
 	}
 	else
 	{
@@ -1132,13 +1130,13 @@ sub _set_internals
 		my @start = @{ $self->{start} };
 
 		if ((not defined $start[0]) or
-			$start[0] < 1 or $start[0] > $self->{'_cols'})
+			$start[0] < 1 or $start[0] > $self->{_cols})
 		{
-			$start[0] = int(rand($self->{'_cols'})) + 1;
+			$start[0] = int(rand($self->{_cols})) + 1;
 			carp "Start column $start[0] is out of range.\n";
 		}
 		if ((not defined $start[1]) or
-			$start[1] < 1 or $start[1] > $self->{'_rows'})
+			$start[1] < 1 or $start[1] > $self->{_rows})
 		{
 			my($row_start, $row_end) = $self->_first_last_row($start[0]);
 			$start[1] = int(rand($row_end - $row_start + 1)) + $row_start;
@@ -1146,22 +1144,22 @@ sub _set_internals
 		}
 
 		if ((not defined $start[2])
-			or $start[2] < 1 or $start[2] > $self->{'_rows'})
+			or $start[2] < 1 or $start[2] > $self->{_rows})
 		{
-			$start[2] = int(rand($self->{'_lvls'})) + 1;
+			$start[2] = int(rand($self->{_lvls})) + 1;
 		}
 
 		$self->{start} = \@start;
 	}
 
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	#
 	# Reset the center cells to unbroken.
 	#
-	foreach $r (1..$self->{'_rows'})
+	foreach $r (1..$self->{_rows})
 	{
-		foreach $c (1..$self->{'_cols'})
+		foreach $c (1..$self->{_cols})
 		{
 			$$m[1][$r][$c] = 0;
 		}
@@ -1175,29 +1173,29 @@ sub _set_internals
 		#
 		# North and South boundry.
 		#
-		foreach $c (1..$self->{'_cols'})
+		foreach $c (1..$self->{_cols})
 		{
 			$$m[1][0][$c] = $NorthWest;
-			$$m[1][$self->{'_rows'} + 1][$c] = $SouthWest;
+			$$m[1][$self->{_rows} + 1][$c] = $SouthWest;
 
 			if ($self->_up_column($c))
 			{
 				$$m[1][0][$c] |= $SouthWest;
-				$$m[1][$self->{'_rows'} + 1][$c] |= $South;
+				$$m[1][$self->{_rows} + 1][$c] |= $South;
 			}
 			else
 			{
-				$$m[1][$self->{'_rows'} + 1][$c] |= $NorthWest;
+				$$m[1][$self->{_rows} + 1][$c] |= $NorthWest;
 			}
 		}
 
 		#
 		# East and West boundry.
 		#
-		foreach $r (0..$self->{'_rows'} + 1)
+		foreach $r (0..$self->{_rows} + 1)
 		{
 			$$m[1][$r][0] = $South | $SouthWest;
-			$$m[1][$r][$self->{'_cols'} + 1] = $South;
+			$$m[1][$r][$self->{_cols} + 1] = $South;
 		}
 
 		#
@@ -1206,7 +1204,7 @@ sub _set_internals
 		#
 		if ($self->_up_column(1))
 		{
-			$$m[1][$self->{'_rows'} + 1][1] |= $NorthWest;
+			$$m[1][$self->{_rows} + 1][1] |= $NorthWest;
 		}
 		else
 		{
@@ -1216,15 +1214,15 @@ sub _set_internals
 		#
 		# Eliminate some corner-border walls.
 		#
-		if ($self->_up_column($self->{'_cols'} + 1))
+		if ($self->_up_column($self->{_cols} + 1))
 		{
-			$$m[1][1][$self->{'_cols'} + 1] |= $NorthWest;
-			$$m[1][$self->{'_rows'} + 1][$self->{'_cols'} + 1] |= $SouthWest;
+			$$m[1][1][$self->{_cols} + 1] |= $NorthWest;
+			$$m[1][$self->{_rows} + 1][$self->{_cols} + 1] |= $SouthWest;
 		}
 		else
 		{
-			$$m[1][$self->{'_rows'}][$self->{'_cols'} + 1] |= $SouthWest;
-			$$m[1][$self->{'_rows'} + 1][$self->{'_cols'} + 1] |= $NorthWest;
+			$$m[1][$self->{_rows}][$self->{_cols} + 1] |= $SouthWest;
+			$$m[1][$self->{_rows} + 1][$self->{_cols} + 1] |= $NorthWest;
 		}
 	}
 	elsif ($self->{form} eq 'Hexagon')
@@ -1234,27 +1232,27 @@ sub _set_internals
 		#
 		# Set up the East-West boundries.
 		#
-		foreach $r (0..$self->{'_rows'} + 1)
+		foreach $r (0..$self->{_rows} + 1)
 		{
-			$$m[1][$r][0] = $$m[1][$r][$self->{'_cols'} + 1] = $allwalls;
+			$$m[1][$r][0] = $$m[1][$r][$self->{_cols} + 1] = $allwalls;
 		}
 
-		if ($self->_up_column($self->{'_cols'} + 1))
+		if ($self->_up_column($self->{_cols} + 1))
 		{
-			my($rlim1, $rlim2) = $self->_first_last_row($self->{'_cols'});
+			my($rlim1, $rlim2) = $self->_first_last_row($self->{_cols});
 			for ($r = $rlim1; $r <= $rlim2; $r++)
 			{
-				$$m[1][$r + 1][1 + $self->{'_cols'}] ^= $NorthWest;
-				$$m[1][$r][1 + $self->{'_cols'}] ^= $SouthWest;
+				$$m[1][$r + 1][1 + $self->{_cols}] ^= $NorthWest;
+				$$m[1][$r][1 + $self->{_cols}] ^= $SouthWest;
 			}
 		}
 		else
 		{
-			my($rlim1, $rlim2) = $self->_first_last_row($self->{'_cols'});
+			my($rlim1, $rlim2) = $self->_first_last_row($self->{_cols});
 			for ($r = $rlim1; $r <= $rlim2; $r++)
 			{
-				$$m[1][$r][1 + $self->{'_cols'}] ^= $NorthWest;
-				$$m[1][$r - 1][1 + $self->{'_cols'}] ^= $SouthWest;
+				$$m[1][$r][1 + $self->{_cols}] ^= $NorthWest;
+				$$m[1][$r - 1][1 + $self->{_cols}] ^= $SouthWest;
 			}
 		}
 
@@ -1274,7 +1272,7 @@ sub _set_internals
 				$$m[1][$r][$c] = $allwalls;
 			}
 
-			for ($r = $self->{'_rows'} + 1; $r > $rlim2; $r--)
+			for ($r = $self->{_rows} + 1; $r > $rlim2; $r--)
 			{
 				$$m[1][$r][$c] = $allwalls;
 			}
@@ -1282,7 +1280,7 @@ sub _set_internals
 			$$m[1][$rlim1 - 1][$c] ^= $South;
 		}
 
-		for ($c = 1 + $cols; $c <= $self->{'_cols'}; $c++)
+		for ($c = 1 + $cols; $c <= $self->{_cols}; $c++)
 		{
 			my($rlim1, $rlim2) = $self->_first_last_row($c);
 
@@ -1291,7 +1289,7 @@ sub _set_internals
 				$$m[1][$r][$c] = $allwalls;
 			}
 
-			for ($r = $self->{'_rows'} + 1; $r > $rlim2; $r--)
+			for ($r = $self->{_rows} + 1; $r > $rlim2; $r--)
 			{
 				$$m[1][$r][$c] = $allwalls;
 			}
@@ -1313,15 +1311,15 @@ sub _set_internals
 sub _set_entry_exit
 {
 	my $self = shift;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 
 	if (defined $self->{entry})
 	{
 		my @entry = @{ $self->{entry} };
 
-		if ($entry[0] < 1 or $entry[0] > $self->{'_cols'})
+		if ($entry[0] < 1 or $entry[0] > $self->{_cols})
 		{
-			$entry[0] = int(rand($self->{'_cols'})) + 1;
+			$entry[0] = int(rand($self->{_cols})) + 1;
 			carp "Entry column $entry[0] is out of range.\n";
 		}
 
@@ -1332,7 +1330,7 @@ sub _set_entry_exit
 	}
 	else
 	{
-		my @entry = (int(rand($self->{'_cols'})) + 1);
+		my @entry = (int(rand($self->{_cols})) + 1);
 
 		($entry[1], undef) = $self->_first_last_row($entry[0]);
 		$entry[2] = 1;
@@ -1344,23 +1342,23 @@ sub _set_entry_exit
 	{
 		my @exit = @{ $self->{exit} };
 
-		if ($exit[0] < 1 or $exit[0] > $self->{'_cols'})
+		if ($exit[0] < 1 or $exit[0] > $self->{_cols})
 		{
-			$exit[0] = int(rand($self->{'_cols'})) + 1;
+			$exit[0] = int(rand($self->{_cols})) + 1;
 			carp "Exit column $exit[0] is out of range.\n";
 		}
 
 		(undef, $exit[1]) = $self->_first_last_row($exit[0]);
-		$exit[2] = $self->{'_lvls'};
+		$exit[2] = $self->{_lvls};
 
 		$self->{exit} = \@exit;
 	}
 	else
 	{
-		my @exit = (int(rand($self->{'_cols'})) + 1);
+		my @exit = (int(rand($self->{_cols})) + 1);
 
 		(undef, $exit[1]) = $self->_first_last_row($exit[0]);
-		$exit[2] = $self->{'_lvls'};
+		$exit[2] = $self->{_lvls};
 
 		$self->{exit} = \@exit;
 	}
@@ -1379,13 +1377,13 @@ sub _get_start_point
 
 	return @{ $self->{start} } if (defined $self->{start});
 
-	my $c = int(rand($self->{'_cols'})) + 1;
+	my $c = int(rand($self->{_cols})) + 1;
 	my($row_start, $row_end) = $self->_first_last_row($c);
 
 	return (
 		$c,
 		int(rand($row_end - $row_start + 1)) + $row_start,
-		int(rand($self->{'_lvls'})) + 1
+		int(rand($self->{_lvls})) + 1
 	);
 }
 
@@ -1449,7 +1447,7 @@ sub _collect_dirs
 {
 	my $self = shift;
 	my($c, $r, $l) = @_;
-	my $m = $self->{'_corn'};
+	my $m = $self->{_corn};
 	my @dir;
 
 	#
@@ -1541,9 +1539,9 @@ sub _first_last_col
 
 	if ($self->{form} eq 'Hexagon')
 	{
-		my $mid_c = ($self->{'_cols'} + 1)/2;
-		my $ante_r = $self->{'_cols'}/4;
-		my $post_r = $self->{'_rows'} - ($self->{'_cols'} + 1)/4;
+		my $mid_c = ($self->{_cols} + 1)/2;
+		my $ante_r = $self->{_cols}/4;
+		my $post_r = $self->{_rows} - ($self->{_cols} + 1)/4;
 
 		if ($r <= $ante_r)
 		{
@@ -1553,20 +1551,20 @@ sub _first_last_col
 		}
 		elsif ($r > $post_r)
 		{
-			my $offset = (2 * ($self->{'_rows'} - $r));
+			my $offset = (2 * ($self->{_rows} - $r));
 			return ($mid_c - $offset, 
 				$mid_c + $offset);
 		}
 		else
 		{
 			return (1, 
-				$self->{'_cols'});
+				$self->{_cols});
 		}
 	}
 	else
 	{
 		return (1, 
-			$self->{'_cols'});
+			$self->{_cols});
 	}
 }
 
@@ -1591,12 +1589,12 @@ sub _first_last_row
 		my $offset_c = abs(${ $self->{dimensions} }[0] - $c);
 
 		return ($offset_c/2 + 1,
-			$self->{'_rows'} - ($offset_c + 1)/2);
+			$self->{_rows} - ($offset_c + 1)/2);
 	}
 	else
 	{
 		return (1, 
-			$self->{'_rows'});
+			$self->{_rows});
 	}
 }
 1;
