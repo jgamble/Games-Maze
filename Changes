@@ -7,6 +7,14 @@ the version 2.00-track.  See the TODO file for more information.
 
 Revision history:
 
+1.05
+	Mon May 21 2012
+	- Named the distribution Games-Mazes insteade of Games-Maze
+	  in the Build.PL. Very stupid typo fixed.
+	- Changed 'use base' in submodules to 'use parent'.
+	- Missed changing the internal hash keys to bareword
+	  format in the previous version. Caught them all now.
+
 1.04
 	Tue May 15 2012
 	- The lc operator now complains about undef values in
