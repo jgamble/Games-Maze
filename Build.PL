@@ -17,7 +17,7 @@ my $build = Module::Build->new(
 		'Games::Maze' => { version => '1.06' },
 		'Games::Maze::Quad' => { version => '1.06' },
 		'Games::Maze::Hex' => { version => '1.06' },
-	}
+	},
 
 	requires => { perl=> '5.8.3' },
 	configure_requires => { 'Module::Build' => '0.3624'},
