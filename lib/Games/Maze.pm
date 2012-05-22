@@ -1618,11 +1618,6 @@ Games::Maze - Create Mazes as Objects.
 
  %maze_attr = $m1->describe();
 
-=head1 PREREQUISITES
-
-Perl 5.8.3 or later. This is the version of perl under which this module
-was developed.
-
 =head1 DESCRIPTION
 
 Simply put, this package create mazes. You may use the Games::Maze
