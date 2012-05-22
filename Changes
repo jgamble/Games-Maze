@@ -7,6 +7,15 @@ the version 2.00-track.  See the TODO file for more information.
 
 Revision history:
 
+1.06
+	Tue May 22 2012
+	- Fixed a missing closing brace in the BUILD.PL 'meta_merge'
+	  key. The github URL should show up now on CPAN.
+	- Removed the PREREQUISITE section in the POD. Useful back
+	  when CPAN was simpler, but it's unneccesary now.
+	- Add the 'provides' key to BUILD.PL. Now PAUSE should
+	  be able to figure out the versions of the child modules.
+
 1.05
 	Mon May 21 2012
 	- Named the distribution Games-Mazes insteade of Games-Maze
