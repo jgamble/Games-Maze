@@ -15,7 +15,7 @@ my $build = Module::Build->new(
 	#
 	provides => {
 		'Games::Maze' => { version => '1.06' },
-		'Games::Maze::Rect' => { version => '1.06' },
+		'Games::Maze::Quad' => { version => '1.06' },
 		'Games::Maze::Hex' => { version => '1.06' },
 	}
 
