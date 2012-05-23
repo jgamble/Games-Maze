@@ -16,15 +16,12 @@ my $build = Module::Build->new(
 	provides => {
 		'Games::Maze' => {
 			file => 'lib/Games/Maze.pm',
-			version => '1.06',
 		},
 		'Games::Maze::Quad' => {
 			file => 'lib/Games/Maze.pm',
-			version => '1.06',
 		},
 		'Games::Maze::Hex' => {
 			file => 'lib/Games/Maze.pm',
-			version => '1.06',
 		},
 	},
 
