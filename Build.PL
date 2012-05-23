@@ -36,7 +36,7 @@ my $build = Module::Build->new(
 	meta_merge => {
 		keywords => [qw(games maze mazes)],
 
-		resourses => {
+		resources => {
 			repository => 'git://github.com/jgamble/Games-Maze.git',
 #			repository => {
 #				url => 'git://github.com/jgamble/Games-Maze.git',
