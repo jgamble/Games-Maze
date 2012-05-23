@@ -614,6 +614,8 @@ use strict;
 use warnings;
 use Carp;
 
+our $VERSION = '1.06';
+
 #
 # to_ascii
 #
@@ -960,6 +962,8 @@ use integer;
 use strict;
 use warnings;
 use Carp;
+
+our $VERSION = '1.06';
 
 #
 # to_ascii

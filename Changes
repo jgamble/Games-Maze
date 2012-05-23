@@ -8,6 +8,12 @@ the version 2.00-track.  See the TODO file for more information.
 Revision history:
 
 1.06
+	Wed May 23 2012
+	- Took a while to work out that 'provides', whatever its
+	  purpose, does not tell Build to put the version number
+	  of the child modules in the META files. You have to
+	  put the $VERSION declaration in the child modules' code.
+
 	Tue May 22 2012
 	- Fixed a missing closing brace in the BUILD.PL 'meta_merge'
 	  key. The github URL should show up now on CPAN.

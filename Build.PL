@@ -14,9 +14,18 @@ my $build = Module::Build->new(
 	# Packages in the same file need to be versioned here.
 	#
 	provides => {
-		'Games::Maze' => { version => '1.06' },
-		'Games::Maze::Quad' => { version => '1.06' },
-		'Games::Maze::Hex' => { version => '1.06' },
+		'Games::Maze' => {
+			file => 'lib/Games/Maze.pm',
+			version => '1.06',
+		},
+		'Games::Maze::Quad' => {
+			file => 'lib/Games/Maze.pm',
+			version => '1.06',
+		},
+		'Games::Maze::Hex' => {
+			file => 'lib/Games/Maze.pm',
+			version => '1.06',
+		},
 	},
 
 	requires => { perl=> '5.8.3' },
