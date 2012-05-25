@@ -1,4 +1,4 @@
-		Games::Maze version 1.06
+		Games::Maze version 1.07
 
 Create Mazes as Objects.
 
@@ -18,8 +18,8 @@ print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
 INSTALLATION
 
 The usual way.  Unpack the archive:
-	gzip -d Games-Maze-1.06.tar.gz
-	tar xvf  Games-Maze-1.06.tar
+	gzip -d Games-Maze-1.07.tar.gz
+	tar xvf  Games-Maze-1.07.tar
 
 This package now uses Module::Build, and the Build.PL script
 but you can still use Makefile.PL, which is provided.

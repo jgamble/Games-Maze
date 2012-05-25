@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 
 our $North      = 0x0001;	# 0;
@@ -614,7 +614,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 #
 # to_ascii
@@ -963,7 +963,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 #
 # to_ascii

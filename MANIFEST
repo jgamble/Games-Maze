@@ -9,7 +9,6 @@ Makefile.PL
 eg/mz.pl
 lib/Games/Maze.pm
 README
-TODO
 t/first.t
 t/mazeprop.pl
 t/pod.t

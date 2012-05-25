@@ -2,10 +2,18 @@
 ###
 NOTE: This module is being re-written.  From now on version 1.0x will
 only be changed for bug fixes and maintenance.  New features will be in
-the version 2.00-track.  See the TODO file for more information.
+the version 2.00-track.
 ###
 
 Revision history:
+
+1.07
+	Fri May 25 2012
+	- Huh. A tester didn't have parent.pm in its BSD set-up. Weird.
+	  Put 'parent' in the 'requires' block in Build.PL.
+
+	Wed May 23 2012
+	- Sigh. Typo-d the 'resources' keyword in Build.PL.
 
 1.06
 	Wed May 23 2012
