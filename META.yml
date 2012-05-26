@@ -7,7 +7,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.3624
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.112621'
+generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.120921'
 keywords:
   - games
   - maze
@@ -20,17 +20,17 @@ name: Games-Maze
 provides:
   Games::Maze:
     file: lib/Games/Maze.pm
-    version: 1.06
+    version: 1.07
   Games::Maze::Hex:
     file: lib/Games/Maze.pm
-    version: 1.06
+    version: 1.07
   Games::Maze::Quad:
     file: lib/Games/Maze.pm
-    version: 1.06
+    version: 1.07
 requires:
+  parent: 0
   perl: v5.8.3
 resources:
   license: http://dev.perl.org/licenses/
-version: 1.06
-x_resourses:
   repository: git://github.com/jgamble/Games-Maze.git
+version: 1.07

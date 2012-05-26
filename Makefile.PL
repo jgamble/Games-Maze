@@ -9,6 +9,7 @@ WriteMakefile
   'EXE_FILES' => [],
   'VERSION_FROM' => 'lib/Games/Maze.pm',
   'PREREQ_PM' => {
+                   'parent' => 0,
                    'Test::Simple' => 0
                  }
 )
