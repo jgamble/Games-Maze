@@ -7,6 +7,14 @@ the version 2.00-track.
 
 Revision history:
 
+1.08
+	Mon Sep 10 2012
+	- Bareword -norequire as part of the "use parent"  line makes
+	  perl sad. Put everthing in qw().
+	- Added 'create_license => 1' to the Build.PL list of attributes.
+	- Added 'dynamic_config => 0' to the Build.PL list of attributes.
+	- Added LICENSE to the MANIFEST file.
+
 1.07
 	Fri May 25 2012
 	- Huh. A tester didn't have parent.pm in its BSD set-up. Weird.

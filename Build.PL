@@ -7,7 +7,7 @@ my $build = Module::Build->new(
 
 	dist_abstract => 'Create Mazes',
 	dist_author => 'John M. Gamble <jgamble@cpan.org>',
-	dist_version => '1.07',
+	dist_version => '1.08',
 	dist_name => 'Games-Maze',
 
 	#
@@ -29,16 +29,20 @@ my $build = Module::Build->new(
 		perl => '5.8.3',
 		parent => 0,
 	},
+
 	configure_requires => {
 		'Module::Build' => '0.3624',
 	},
+
 	build_requires => {
 		'Test::Simple' => 0,
 	},
 
 	license => 'perl',
+	create_license => 1,
 	create_readme => 0,
 	create_makefile_pl => 'traditional',
+	dynamic_config => 0,
 
 	meta_merge => {
 		keywords => [qw(games maze mazes)],

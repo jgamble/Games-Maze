@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 
 our $North      = 0x0001;	# 0;
@@ -607,14 +607,14 @@ sub _on_pathmark
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Quad;
-use parent -norequire, 'Games::Maze';
+use parent qw(-norequire Games::Maze);
 
 use integer;
 use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 #
 # to_ascii
@@ -956,14 +956,14 @@ sub _next_direct
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Hex;
-use parent -norequire, 'Games::Maze';
+use parent qw(-norequire Games::Maze);
 
 use integer;
 use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 #
 # to_ascii
