@@ -14,6 +14,8 @@ Revision history:
 	- Added 'create_license => 1' to the Build.PL list of attributes.
 	- Added 'dynamic_config => 0' to the Build.PL list of attributes.
 	- Added LICENSE to the MANIFEST file.
+	Fri Jun 07 2012
+	- POD changes from Ben Bullock merged in.
 
 1.07
 	Fri May 25 2012
