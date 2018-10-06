@@ -2,9 +2,10 @@ package Games::Maze;
 use 5.008003;
 
 use integer;
-use strict;
-use warnings;
 use Carp;
+use Moo;
+use Types::Standard qw( ArrayRef Str Bool CodeRef Int );
+use Scalar::Util qw( blessed );
 
 our $VERSION = '1.08';
 
@@ -97,95 +98,68 @@ my($Debug_internal) = 0;
 #
 # Valid options to new().
 #
-
-my %valid = (
-	dimensions => 'array',
-	form => 'scalar',
-	cell => 'scalar',
-	upcolumn_even => 'scalar',
-	generate => 'scalar',
-	connect => 'scalar',
-	fn_choosedir => 'scalar',
-	entry => 'array',
-	exit => 'array',
-	start => 'array',
-);
-
 #
 # new
 #
 # Creates the object with its attributes.  Valid attributes
 # are listed in the %valid hash.
 #
-sub new
-{
-	my $class = shift;
-	my $self = {};
 
-	#
-	# We are copying from an existing maze object?
-	#
-	if (ref $class)
-	{
-		if ($class->isa("Games::Maze"))
-		{
-			$class->_copy($self);
-			return bless($self, ref $class);
-		}
+has fn_choosedir => ( is => 'ro', isa => CodeRef );
 
-		warn "Attempts to create a Maze object from a '",
-			ref $class, "' object fail.\n";
-		return undef;
-	}
+has upcolumn_even => ( is => 'ro', isa => Bool );
 
-	#
-	# Starting from scratch.
-	#
-	my(%params) = @_;
+has [qw( _lvls _rows _cols )] => ( is => 'ro', isa => Int );
 
-	while ( my($key, $keyval) = each %params)
-	{
-		$key = lc $key;
-		my $ref_type = $valid{$key};
+has [qw( dimensions entry exit start )] => ( is => 'ro', isa => ArrayRef );
 
-		unless (defined $ref_type)
-		{
-			carp "Ignoring unknown parameter '$key'\n";
-			next;
-		}
+has [qw( form cell generate connect )] => ( is => 'ro', isa => Str );
 
-		$self->{$key} = $keyval if ($ref_type eq 'scalar');
-		push(@{ $self->{$key} }, @{ $keyval }) if ($ref_type eq 'array');
-	}
+has '+form'     => default => 'Rectangle';
+has '+cell'     => default => 'Quad';
+has '+connect'  => default => 'Simple';
+has '+generate' => default => 'Random';
 
-
-	#
-	# Put in defaults for any unnamed but required parameters.
-	#
-	$self->{dimensions} ||= [3, 3, 1];
-	push @{ $self->{dimensions} }, 3 if (@{ $self->{dimensions} } < 1);
-	push @{ $self->{dimensions} }, 3 if (@{ $self->{dimensions} } < 2);
-	push @{ $self->{dimensions} }, 1 if (@{ $self->{dimensions} } < 3);
-
-	$self->{form} = ucfirst lc($self->{form} || 'Rectangle');
-	$self->{cell} = ucfirst lc($self->{cell} || 'Quad');
-
-	unless ($self->{form} =~ /^(?:Rectangle|Hexagon)$/)
-	{
-		carp "Unknown form type ", $self->{form};
-		return undef;
-	}
-	unless ($self->{cell} =~ /^(?:Quad|Hex)$/)
-	{
-		carp "Unknown cell type ", $self->{cell};
-		return undef;
-	}
-
-	bless($self, $class . "::" . $self->{cell});
-
-	return $self->reset();
+# Coerce these attributes to ucfirst lc $value
+for my $attr (qw( cell form )) {
+	has "+$attr" => trigger => sub {
+		return if $_[1] =~ /^[A-Z][a-z]+$/;
+		$_[0]->{$attr} = ucfirst lc $_[1];
+	};
 }
 
+sub BUILDARGS {
+	my $self = shift;
+	my $args = @_ ? @_ > 1 ? { @_ } : shift : {};
+
+	$args->{dimensions} //= [];
+	push @{ $args->{dimensions} }, 3 if (@{ $args->{dimensions} } < 1);
+	push @{ $args->{dimensions} }, 3 if (@{ $args->{dimensions} } < 2);
+	push @{ $args->{dimensions} }, 1 if (@{ $args->{dimensions} } < 3);
+
+	return $args
+}
+
+around new => sub {
+	my $orig = shift;
+	my $self = shift;
+
+	# Constructing from existing maze
+	if (blessed $self && $self->isa('Games::Maze')) {
+		my $copy = $self->_copy;
+		return bless $copy, ref($self);
+	}
+
+	$self = $self->$orig(@_);
+	my $class = ref($self);
+
+	# Already a sub-class
+	return $self if $self->{cell} && $class =~ $self->{cell};
+
+	# Rebless as sub-class
+	$self = bless $self, $class . "::" . $self->{cell};
+	return $self->reset;
+};
 
 #
 # describe
@@ -607,11 +581,11 @@ sub _on_pathmark
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Quad;
-use parent qw(-norequire Games::Maze);
+
+use Moo;
+extends 'Games::Maze';
 
 use integer;
-use strict;
-use warnings;
 use Carp;
 
 our $VERSION = '1.08';
@@ -956,11 +930,11 @@ sub _next_direct
 # Maze creation is done through the maze object's methods, listed below:
 #
 package Games::Maze::Hex;
-use parent qw(-norequire Games::Maze);
+
+use Moo;
+extends 'Games::Maze';
 
 use integer;
-use strict;
-use warnings;
 use Carp;
 
 our $VERSION = '1.08';
@@ -1599,6 +1573,7 @@ sub _first_last_row
 			$self->{_rows});
 	}
 }
+
 1;
 __END__
 
