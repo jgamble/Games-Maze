@@ -1,7 +1,8 @@
-		Games::Maze version 1.08
+# Games::Maze version 1.08
 
 Create Mazes as Objects.
 
+```perl
 use Games::Maze;
 
 my $m1 = Games::Maze->new(dimensions => [12,7,3]);
@@ -14,37 +15,22 @@ print scalar($m1->to_ascii());
 $m1->solve();
 
 print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
+```
 
-INSTALLATION
+# INSTALLATION
 
 The usual way.  Unpack the archive:
 	gzip -d Games-Maze-1.08.tar.gz
 	tar xvf  Games-Maze-1.08.tar
 
-This package now uses Module::Build, and the Build.PL script
-but you can still use Makefile.PL, which is provided.
+```sh
+perl Build.PL
+./Build
+./Build test
+./Build install
+```
 
-Go to the resulting directory, and type:
-	perl Makefile.PL
-	make 
-
-Run the tests:
-	make test 
-
-Install the module:
-	make install
-
-Alternatively, you can use Build.PL:
-	perl Build.PL
-	Build
-
-Run the tests:
-	Build test
-
-Install the module:
-	Build install
-
-COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 Copyright (c) 2012 John M. Gamble.  All rights reserved.  This program is
 free software; you can redistribute it and/or modify it under the same
