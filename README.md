@@ -20,10 +20,7 @@ print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
 ```
 
 ## INSTALLATION
-
-The usual way.  Unpack the archive:
-	gzip -d Games-Maze-1.08.tar.gz
-	tar xvf  Games-Maze-1.08.tar
+The usual way.  Unpack the archive, then:
 
 ```sh
 perl Build.PL
