@@ -1,4 +1,6 @@
-# Games::Maze version 1.08
+# Games::Maze
+
+## version 1.09
 
 Create Mazes as Objects.
 
@@ -17,7 +19,7 @@ $m1->solve();
 print "\n\nThe Solution:\n\n", scalar($m1->to_ascii());
 ```
 
-# INSTALLATION
+## INSTALLATION
 
 The usual way.  Unpack the archive:
 	gzip -d Games-Maze-1.08.tar.gz
@@ -30,9 +32,13 @@ perl Build.PL
 ./Build install
 ```
 
-# COPYRIGHT AND LICENSE
+## COPYRIGHT AND LICENSE
 
-Copyright (c) 2012 John M. Gamble.  All rights reserved.  This program is
-free software; you can redistribute it and/or modify it under the same
-terms as Perl itself.
+Copyright (c) 2018 John M. Gamble.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
 
