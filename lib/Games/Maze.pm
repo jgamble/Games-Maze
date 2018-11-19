@@ -1,13 +1,12 @@
 package Games::Maze;
-use 5.008003;
+use 5.016001;
 
-use integer;
 use Carp;
 use Moo;
 use Types::Standard qw( ArrayRef Str Bool CodeRef Int );
 use Scalar::Util qw( blessed );
 
-our $VERSION = '1.08';
+our $VERSION = '1.09';
 
 
 our $North      = 0x0001;	# 0;
@@ -101,8 +100,7 @@ my($Debug_internal) = 0;
 #
 # new
 #
-# Creates the object with its attributes.  Valid attributes
-# are listed in the %valid hash.
+# Creates the object with its attributes, listed below.
 #
 
 has fn_choosedir => ( is => 'ro', isa => CodeRef );
@@ -121,14 +119,17 @@ has '+connect'  => default => 'Simple';
 has '+generate' => default => 'Random';
 
 # Coerce these attributes to ucfirst lc $value
-for my $attr (qw( cell form )) {
-	has "+$attr" => trigger => sub {
+for my $attr (qw( cell form ))
+{
+	has "+$attr" => trigger => sub
+	{
 		return if $_[1] =~ /^[A-Z][a-z]+$/;
 		$_[0]->{$attr} = ucfirst lc $_[1];
 	};
 }
 
-sub BUILDARGS {
+sub BUILDARGS
+{
 	my $self = shift;
 	my $args = @_ ? @_ > 1 ? { @_ } : shift : {};
 
@@ -140,12 +141,14 @@ sub BUILDARGS {
 	return $args
 }
 
-around new => sub {
+around new => sub
+{
 	my $orig = shift;
 	my $self = shift;
 
 	# Constructing from existing maze
-	if (blessed $self && $self->isa('Games::Maze')) {
+	if (blessed $self && $self->isa('Games::Maze'))
+	{
 		my $copy = $self->_copy;
 		return bless $copy, ref($self);
 	}
@@ -585,10 +588,9 @@ package Games::Maze::Quad;
 use Moo;
 extends 'Games::Maze';
 
-use integer;
 use Carp;
 
-our $VERSION = '1.08';
+our $VERSION = '1.09';
 
 #
 # to_ascii
@@ -934,10 +936,9 @@ package Games::Maze::Hex;
 use Moo;
 extends 'Games::Maze';
 
-use integer;
 use Carp;
 
-our $VERSION = '1.08';
+our $VERSION = '1.09';
 
 #
 # to_ascii
@@ -1515,9 +1516,9 @@ sub _first_last_col
 
 	if ($self->{form} eq 'Hexagon')
 	{
-		my $mid_c = ($self->{_cols} + 1)/2;
-		my $ante_r = $self->{_cols}/4;
-		my $post_r = $self->{_rows} - ($self->{_cols} + 1)/4;
+		my $mid_c = int(($self->{_cols} + 1)/2);
+		my $ante_r = int($self->{_cols}/4);
+		my $post_r = $self->{_rows} - int(($self->{_cols} + 1)/4);
 
 		if ($r <= $ante_r)
 		{
@@ -1564,8 +1565,8 @@ sub _first_last_row
 		#
 		my $offset_c = abs(${ $self->{dimensions} }[0] - $c);
 
-		return ($offset_c/2 + 1,
-			$self->{_rows} - ($offset_c + 1)/2);
+		return (int($offset_c/2) + 1,
+			$self->{_rows} - int(($offset_c + 1)/2));
 	}
 	else
 	{
